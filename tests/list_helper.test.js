@@ -105,3 +105,25 @@ describe('favorite blog', () => {
     )
   })
 })
+
+describe('most blogs', () => {
+  test('list with 1 blog', ()=>{
+    const result = listHelper.mostBlogs(listWithOneBlog)
+    assert.deepStrictEqual(result, { author: 'Edsger W. Dijkstra', blogs: 1 })
+  })
+  test('list with multiple blogs', ()=>{
+    const result = listHelper.mostBlogs(blogs)
+    assert.deepStrictEqual(result, { author: "Robert C. Martin", blogs: 3 })
+  })
+})
+
+describe('most likes', ()=>{
+  test('list with 1 blog', ()=>{
+    const result = listHelper.mostLikes(listWithOneBlog)
+    assert.deepStrictEqual(result, { author: 'Edsger W. Dijkstra', likes: 5 })
+  })
+  test('list with multiple blogs', ()=>{
+    const result = listHelper.mostLikes(blogs)
+    assert.deepStrictEqual(result, { author: "Edsger W. Dijkstra", likes: 17 })
+  })
+})
