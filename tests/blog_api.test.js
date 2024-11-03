@@ -64,8 +64,7 @@ beforeEach(async()=>{
 })
 
 test('GET /api/blogs returns list of blogs', async()=>{
-  await api
-    .get('/api/blogs')
+  await api.get('/api/blogs')
     .expect(200)
     .expect('Content-Type', /application\/json/)
 })
@@ -75,6 +74,57 @@ test('valid id property is defined for each record', async()=>{
 
   const elementsWithId = res.body.filter(el => el.id.length === 24)
   assert.strictEqual(elementsWithId.length, initialBlogs.length)
+})
+
+test('valid record can be added', async()=>{
+  const newBlog = {
+    title:"test title",
+    author:"test author",
+    url:"https://testurl.com/"
+  }
+
+  await api.post('/api/blogs')
+    .send(newBlog)
+    .expect(201)
+    .expect('Content-Type', /application\/json/)
+
+  const response = await api.get('/api/blogs')
+  const contents = response.body.map(r => r.title)
+
+  assert.strictEqual(response.body.length, initialBlogs.length + 1)
+  assert(contents.includes('test title'))
+})
+
+test('undefined likes is set to 0', async()=>{
+  const newBlog = {
+    title:"no likes",
+    author:"test author",
+    url:"https://testurl.com/"
+  }
+
+  await api.post('/api/blogs')
+    .send(newBlog)
+    .expect(201)
+    .expect('Content-Type', /application\/json/)
+  
+  const response = await api.get('/api/blogs')
+  const contents = response.body.map(r => `${r.title}${r.likes}`)
+  assert(contents.includes('no likes0'))
+})
+
+test('record with no title or url is not added', async()=>{
+  const newBlog = {
+    author:"test author",
+    like:12
+  }
+
+  await api.post('/api/blogs')
+    .send(newBlog)
+    .expect(400)
+    .expect('Content-Type', /application\/json/)
+  
+  const response = await api.get('/api/blogs')
+  assert.strictEqual(response.body.length, initialBlogs.length)
 })
 
 after(async () => {
