@@ -49,10 +49,10 @@ blogsRouter.delete('/:id', middleware.userExtractor, async(req, res)=>{
   const user = req.user
 
   const recordToDelete = await Blog.findById(id)
-  if(user._id.toString() === recordToDelete.user.toString())
-    { 
-      return res.status(401).json({ error: 'wrong token' }) 
-    }
+  if(!recordToDelete) { return res.status(204).end()} // record already deleten
+  if(!(user._id.toString() === recordToDelete.user.toString()))
+    { return res.status(401).json({ error: 'wrong token' }) }
+
   await Blog.findByIdAndDelete(id)
   res.status(204).end()
 })

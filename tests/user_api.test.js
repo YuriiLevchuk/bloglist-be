@@ -44,14 +44,11 @@ describe(('user api test'), ()=>{
       .expect('Content-Type', /application\/json/)
     
     const response = await api.get('/api/users')
-    console.log(response.body)
+    //console.log(response.body)
     assert.strictEqual(response.body.length, testUsers.length)
   })
 })
 
 after(async () => {
-  await setTimeout( function () {
-    console.log('...');
-  }, 1000);
   await mongoose.connection.close();
 })
