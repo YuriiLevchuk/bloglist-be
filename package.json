@@ -5,7 +5,8 @@
   "scripts": {
     "start": "cross-env NODE_ENV=production node index.js",
     "test": "cross-env NODE_ENV=test node --test --test-concurrency=1",
-    "dev": "cross-env NODE_ENV=development nodemon index.js"
+    "dev": "cross-env NODE_ENV=development nodemon index.js",
+    "start:test": "cross-env NODE_ENV=test node --watch index.js"
   },
   "author": "Yurii Levchuk",
   "license": "ISC",
