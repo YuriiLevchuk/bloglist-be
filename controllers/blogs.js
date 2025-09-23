@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken')
 const Blog = require('../models/blog')
 const User = require('../models/user')
 const middleware = require('../utils/middleware');
+const { default: blogs } = require('../../frontend/src/services/blogs');
 
 blogsRouter.get('/', async(req, res) => {
   const blogs = await Blog
@@ -78,5 +79,19 @@ blogsRouter.put('/:id', async(req, res)=>{
   res.json(blogAfterUpdate)
 })
 
+blogsRouter.post('/:id/comments', async(req, res)=>{
+  const id = req.params.id
+  const comment = req.body.comment
+  const blog = await Blog.findById(id)
+  blog.comments = blog.comments.concat(comment)
+  await blog.save()
+  res.json(blog)
+})
+
+blogsRouter.get('/:id/comments', async(req, res)=>{
+  const id = req.params.id
+  const blog = await Blog.findById(id)
+  res.json(blog.comments)
+})
 
 module.exports = blogsRouter
